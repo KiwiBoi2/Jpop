@@ -454,6 +454,8 @@ ul.dropdown-menu > li > a:hover, .navbar ul ul ul.dropdown-menu li .nav-link:hov
   margin-bottom: 0px;
   transform: translateX(-150px);
   transition: all 0.3s;
+  color: #2f3238;
+  font-weight: 600;
 }
 .overlay-content p {
   font-size: 14px;
