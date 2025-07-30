@@ -185,6 +185,7 @@ a:hover {
 .banner .cd-headline {
   font-size: 56px;
   line-height: 70px;
+  font-weight: 700;
 }
 
 .banner-3 {
@@ -216,7 +217,6 @@ ul.dropdown-menu {
 ul.dropdown-menu > li > a, .navbar ul ul ul.dropdown-menu li .nav-link {
   font-size: 12px;
   line-height: 22px;
-  display: block;
   position: relative;
   z-index: 1;
   padding-left: 15px;
@@ -245,11 +245,7 @@ ul.dropdown-menu > li > a:hover, .navbar ul ul ul.dropdown-menu li .nav-link:hov
   -ms-border-radius: 0;
   padding: 0;
   border: 0;
-  display: block;
-  opacity: 0;
-  visibility: hidden;
   min-width: 210px;
-  transform: scaleY(0);
   -webkit-transform: scaleY(0);
   -moz-transform: scaleY(0);
   -ms-transform: scaleY(0);
@@ -278,6 +274,15 @@ ul.dropdown-menu > li > a:hover, .navbar ul ul ul.dropdown-menu li .nav-link:hov
   -moz-transform: scaleY(1);
   -ms-transform: scaleY(1);
   -o-transform: scaleY(1);
+}
+
+@media (min-width: 992px) {
+  .navbar .dropdown:hover .dropdown-menu {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
 }
 
 @media (max-width: 575px) {
