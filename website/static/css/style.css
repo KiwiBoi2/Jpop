@@ -97,7 +97,7 @@ h6, .h6 {
 }
 
 .btn-main {
-  background: #f44336;
+  background: #36a5f4;
   color: #fff;
 }
 .btn-main:hover {
@@ -110,7 +110,7 @@ h6, .h6 {
   color: #fff;
 }
 .btn-black:hover {
-  background: #f44336;
+  background: #36a5f4;
   color: #fff;
 }
 
@@ -129,13 +129,13 @@ a {
   transition: all 0.25s ease;
 }
 a:hover {
-  color: #f44336;
+  color: #36a5f4;
   text-decoration: none;
   outline: none;
 }
 
 .bg-primary {
-  background: #f44336 !important;
+  background: #36a5f4 !important;
 }
 
 .bg-secondary {
@@ -147,7 +147,7 @@ a:hover {
 }
 
 .text-color {
-  color: #f44336;
+  color: #36a5f4;
 }
 
 .page-title h1 {
@@ -162,7 +162,7 @@ a:hover {
   width: 40px;
   height: 2px;
   margin-left: -25px;
-  background: #f44336;
+  background: #36a5f4;
 }
 
 @media (max-width: 575px) {
@@ -179,6 +179,7 @@ a:hover {
 }
 .cd-headline.clip span {
   padding: 0px;
+  font-weight: 500;
 }
 
 .banner .cd-headline {
@@ -227,7 +228,7 @@ ul.dropdown-menu > li > a, .navbar ul ul ul.dropdown-menu li .nav-link {
   text-transform: uppercase;
 }
 ul.dropdown-menu > li > a:hover, .navbar ul ul ul.dropdown-menu li .nav-link:hover {
-  color: #f44336;
+  color: #36a5f4;
 }
 
 .dropdown-item:focus, .dropdown-item:hover {
@@ -352,14 +353,14 @@ ul.dropdown-menu > li > a:hover, .navbar ul ul ul.dropdown-menu li .nav-link:hov
   font-weight: 700;
 }
 .portfolio .btn-group .btn:hover {
-  color: #f44336;
+  color: #36a5f4;
 }
 .portfolio .btn-group:not(:first-child) > .btn, .portfolio .btn-group > .btn:not(:first-child) {
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
 }
 .portfolio .btn.active {
-  color: #f44336;
+  color: #36a5f4;
 }
 
 .inner-box {
@@ -583,7 +584,7 @@ ul.dropdown-menu > li > a:hover, .navbar ul ul ul.dropdown-menu li .nav-link:hov
 }
 .form-control:focus {
   box-shadow: none;
-  border-color: #f44336;
+  border-color: #36a5f4;
 }
 
 textarea.form-control {
@@ -606,7 +607,7 @@ textarea.form-control {
   width: 40px;
   height: 2px;
   margin-left: -25px;
-  background: #f44336;
+  background: #36a5f4;
 }
 
 .letter-spacing {
@@ -632,7 +633,7 @@ textarea.form-control {
   transition: all 0.35s ease;
 }
 .post .post-content a:hover h4 {
-  color: #f44336;
+  color: #36a5f4;
 }
 
 .pagination {
@@ -648,11 +649,11 @@ textarea.form-control {
   transition: 0.3s;
 }
 .pagination li a:hover {
-  background: #f44336;
+  background: #36a5f4;
   color: #fff;
 }
 .pagination li.active a {
-  background: #f44336;
+  background: #36a5f4;
   color: #fff;
 }
 
@@ -749,6 +750,6 @@ textarea.form-control {
   text-transform: capitalize;
 }
 .footer-widget a:hover {
-  color: #f44336;
+  color: #36a5f4;
 }
 /*# sourceMappingURL=style.css.map */
