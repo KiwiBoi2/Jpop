@@ -44,4 +44,4 @@ def contact():
             db.session.commit()
             flash("Comment Added!", category="success")
     
-    return render_template("contact.html")
+    return render_template("home.html")

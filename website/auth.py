@@ -15,9 +15,9 @@ def sign_up():
         username = request.form.get("username")
         password1 = request.form.get("password1")
         password2 = request.form.get("password2")
-        
+
         user = User.query.filter_by(email=email).first()
-        
+
         if user:
             flash("Email already exists.", category="error")
         elif len(email) < 4:
@@ -35,7 +35,7 @@ def sign_up():
             login_user(new_user, remember=True)
             flash("Account created!", category="success")
             return redirect(url_for("views.home"))
-        
+
     return render_template("sign_up.html", user=current_user)
 
 # login route
@@ -52,7 +52,7 @@ def login():
                 return redirect(url_for("views.contact"))
             else:
                 flash("Incorrect password, try again.", category="error")
-        else: 
+        else:
             flash("Email does not exist.", category="error")
     return render_template("login.html", user=current_user)
 
