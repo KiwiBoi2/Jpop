@@ -13,23 +13,23 @@ views = Blueprint("views", __name__)
 @views.route("/home")
 @views.route("/index")
 def home():
-    return render_template("home.html")
+    return render_template("home.html", user=current_user)
 
 
 # albums route
 @views.route("/albums")
 def albums():
-    return render_template("albums.html")
+    return render_template("albums.html", user=current_user)
 
 # artists route
 @views.route("/artists")
 def artists():
-    return render_template("artists.html")
+    return render_template("artists.html", user=current_user)
 
 # songs route
 @views.route("/songs")
 def songs():
-    return render_template("songs.html")
+    return render_template("songs.html", user=current_user)
 
 # contact route
 @views.route("/contact", methods=["POST", "GET", "DELETE"])
