@@ -32,9 +32,10 @@ def songs():
     return render_template("songs.html")
 
 # contact route
-@views.route("/contact", methods=["POST", "GET"])
+@views.route("/contact", methods=["POST", "GET", "DELETE"])
 @login_required
 def contact():
+    # Post note route
     if request.method == "POST":
         note = request.form.get("note")
         if len(note) < 1:
@@ -44,5 +45,15 @@ def contact():
             db.session.add(new_note)
             db.session.commit()
             flash("Comment Added!", category="success")
+    # Delete note route
+    if request.method == "DELETE":
+        note=Note.query.get(id)
+        if note and note.user_id == current_user.id:
+            db.session.delete(note)
+            db.session.commit()
+            flash("Comment deleted!", category="success")
+        else:
+            flash("You do not have permission to delete this comment.", category="error")
     
+            
     return render_template("contact.html", user=current_user)
