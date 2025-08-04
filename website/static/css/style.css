@@ -761,6 +761,23 @@ textarea.form-control {
 }
 /*# sourceMappingURL=style.css.map */
 
-.list-group .list-group-flush {
-  border-color: #e8eefb;
+.note-item {
+    position: relative;
+}
+
+.note-actions {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.note-item:hover .note-actions {
+    opacity: 1;
+}
+
+.note-actions button {
+    margin-left: 5px;
 }

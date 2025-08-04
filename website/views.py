@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, url_for, request, flash, redirect
+from flask import Blueprint, render_template, url_for, request, flash, redirect, jsonify
 from flask_login import login_user, login_required, logout_user, current_user
 from .models import User, Note
 from . import db
@@ -47,7 +47,7 @@ def contact():
           
     return render_template("contact.html", user=current_user)
 
-@views.route("/delete-note/<int:note_id>", methods=["GET"])
+@views.route("/delete-note/<int:note_id>", methods=["POST"])
 @login_required
 def delete_note(note_id):
     note=Note.query.get(note_id)
@@ -58,3 +58,16 @@ def delete_note(note_id):
     else:
         flash("You do not have permission to delete this comment.", category="error")
     return redirect(url_for("views.contact"))
+
+@views.route("/edit-note/<int:note_id>", methods=["POST"])
+@login_required
+def edit_note(note_id):
+    note = Note.query.get(note_id)
+    if note and note.user_id == current_user.id:
+        content = request.json.get('content')
+        if content and len(content.strip()) > 0:
+            note.data = content
+            db.session.commit()
+            flash("Comment updated!", category="success")
+            return jsonify({"success": True})
+    return jsonify({"success": False}), 400

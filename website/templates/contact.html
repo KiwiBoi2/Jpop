@@ -6,17 +6,19 @@
 
 <ul class="list-group list-group-flush" id="notes">
     {% for note in user.notes %}
-    <div class="overlay-box">
-        <li class="list-group-item">
+    <li class="list-group-item note-item">
+        <div class="note-content">
             {{ note.data }}
-            <div class="overlay-inner" align="right">
-                <a class=overlay-content href="/delete-note/{{ note.id }}">
-                    <h5 class="mb-0">Delete Note</h5>
-                    <p>Click to delete this note</p>
-                </a>
+            <div class="note-actions">
+                <button class="btn btn-sm btn-secondary edit-btn" onclick="editNote({{ note.id }}, '{{ note.data }}')">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-sm btn-danger delete-btn" onclick="deleteNote({{ note.id }})">
+                    <i class="fas fa-trash"></i
+                </button>
             </div>
-        </li>
-    </div>
+        </div>
+    </li>
     {% endfor %}
 </ul>
 
@@ -28,27 +30,34 @@
     </div>
 </form>
 
-<div align="center">
-    <button class="btn btn-danger" type="submit" id="delete">Delete Note</button>
-</div>
-
-
 <script>
-    document.getElementById('delete').addEventListener('click', function(event) {
-        event.preventDefault();
-        const noteId = ;
+function deleteNote(noteId) {
+    if (confirm('Are you sure you want to delete this note?')) {
         fetch(`/delete-note/${noteId}`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
         }).then(response => {
             if (response.ok) {
                 window.location.reload();
-            } else {
-                alert('Failed to delete note.');
             }
         });
-    });
+    }
+}
+
+function editNote(noteId, currentContent) {
+    const newContent = prompt('Edit your note:', currentContent);
+    if (newContent && newContent !== currentContent) {
+        fetch(`/edit-note/${noteId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ content: newContent })
+        }).then(response => {
+            if (response.ok) {
+                window.location.reload();
+            }
+        });
+    }
+}
 </script>
 {% endblock %} 
