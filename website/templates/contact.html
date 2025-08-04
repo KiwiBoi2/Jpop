@@ -1,6 +1,24 @@
 {% extends "template.html" %} {% block title%}Contact Us{% endblock %}
 
 {% block content %}
-    <h2>Welcome to the Contact Page</h2>
-    <p>This is the main content area for the contact page.</p>
-{% endblock %}
+
+<h1 align=center>Contact</h1>
+
+<ul class="list-group list-group-flush" id="notes">
+    {% for note in user.notes %}
+        <li class="list-group-item">
+            {{ note.data }}
+        </li>
+    {% endfor %}
+</ul>
+
+<form method="POST">
+    <textarea name="note" id="note" class="form-control"></textarea>
+    <br/>
+    <div align="center">
+        <button class="btn btn-primary" type="submit">Add Comment</button>
+    </div>
+</form>
+
+
+{% endblock %} 

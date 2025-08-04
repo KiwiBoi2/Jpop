@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, url_for, request, flash, redirect
 from flask_login import login_user, login_required, logout_user, current_user
 from .models import User, Note
 from . import db
+from datetime import datetime
 
 # set blueprint
 views = Blueprint("views", __name__)
@@ -39,9 +40,9 @@ def contact():
         if len(note) < 1:
             flash("Comment field cannot be empty!", category="error")
         else:
-            new_note = Note(data=note, user_id=current_user.id)
+            new_note = Note(data=note, user_id=current_user.id, date=datetime.now())
             db.session.add(new_note)
             db.session.commit()
             flash("Comment Added!", category="success")
     
-    return render_template("home.html")
+    return render_template("contact.html", user=current_user)
