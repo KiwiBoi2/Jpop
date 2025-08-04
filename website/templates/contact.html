@@ -20,5 +20,26 @@
     </div>
 </form>
 
+    <div align="right">
+        <button class="btn btn-danger" type="submit" id="delete">Delete Note</button>
+    </div>
 
+<script>
+    document.getElementById('delete').addEventListener('click', function(event) {
+        event.preventDefault();
+        const noteId = ;
+        fetch(`/delete-note/${noteId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                alert('Failed to delete note.');
+            }
+        });
+    });
+</script>
 {% endblock %} 
