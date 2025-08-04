@@ -760,3 +760,7 @@ textarea.form-control {
   color: #36a5f4;
 }
 /*# sourceMappingURL=style.css.map */
+
+.list-group .list-group-flush {
+  border-color: #e8eefb;
+}

@@ -6,9 +6,17 @@
 
 <ul class="list-group list-group-flush" id="notes">
     {% for note in user.notes %}
+    <div class="overlay-box">
         <li class="list-group-item">
             {{ note.data }}
+            <div class="overlay-inner" align="right">
+                <a class=overlay-content href="/delete-note/{{ note.id }}">
+                    <h5 class="mb-0">Delete Note</h5>
+                    <p>Click to delete this note</p>
+                </a>
+            </div>
         </li>
+    </div>
     {% endfor %}
 </ul>
 
@@ -19,9 +27,11 @@
         <button class="btn btn-primary" type="submit">Add Comment</button>
     </div>
 </form>
-    <div align="center">
-        <button class="btn btn-danger" type="submit" id="delete">Delete Note</button>
-    </div>
+
+<div align="center">
+    <button class="btn btn-danger" type="submit" id="delete">Delete Note</button>
+</div>
+
 
 <script>
     document.getElementById('delete').addEventListener('click', function(event) {
