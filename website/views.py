@@ -47,7 +47,7 @@ def contact():
           
     return render_template("contact.html", user=current_user)
 
-@views.route("/delete-note/<int:note_id>", methods=["POST"])  
+@views.route("/delete-note/<int:note_id>", methods=["POST"])
 @login_required
 def delete_note(note_id):
     note=Note.query.get(note_id)
