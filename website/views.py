@@ -50,24 +50,33 @@ def contact():
 @views.route("/delete-note/<int:note_id>", methods=["POST"])
 @login_required
 def delete_note(note_id):
-    note=Note.query.get(note_id)
-    if note and note.user_id == current_user.id:
+    note = Note.query.get_or_404(note_id)
+    if note.user_id != current_user.id:
+        return jsonify({"error": "Unauthorized"}), 403
+    
+    try:
         db.session.delete(note)
         db.session.commit()
-        flash("Comment deleted!", category="success")
-    else:
-        flash("You do not have permission to delete this comment.", category="error")
-    return redirect(url_for("views.contact"))
+        return jsonify({"success": True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
 
 @views.route("/edit-note/<int:note_id>", methods=["POST"])
 @login_required
 def edit_note(note_id):
-    note = Note.query.get(note_id)
-    if note and note.user_id == current_user.id:
-        content = request.json.get('content')
-        if content and len(content.strip()) > 0:
-            note.data = content
-            db.session.commit()
-            flash("Comment updated!", category="success")
-            return jsonify({"success": True})
-    return jsonify({"success": False}), 400
+    note = Note.query.get_or_404(note_id)
+    if note.user_id != current_user.id:
+        return jsonify({"error": "Unauthorized"}), 403
+
+    content = request.json.get('content')
+    if not content or len(content.strip()) == 0:
+        return jsonify({"error": "Content cannot be empty"}), 400
+    
+    try:
+        note.data = content
+        db.session.commit()
+        return jsonify({"success": True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
