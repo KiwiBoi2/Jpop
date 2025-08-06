@@ -153,6 +153,7 @@ a:hover {
 .page-title h1 {
   position: relative;
   padding-bottom: 30px;
+  text-decoration: underline;
 }
 .page-title h1:after {
   position: absolute;
