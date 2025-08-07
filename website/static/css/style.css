@@ -762,15 +762,37 @@ textarea.form-control {
 }
 /*# sourceMappingURL=style.css.map */
 
+/* Styling for note items with hover effects */
 .note-item {
     position: relative;
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.note-item:hover {
+    background-color: #e9ecef;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.note-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.note-text {
+    flex-grow: 1;
+    margin-right: 15px;
+    word-wrap: break-word;
 }
 
 .note-actions {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
+    display: flex;
+    gap: 8px;
     opacity: 0;
     transition: opacity 0.3s ease;
 }
@@ -779,6 +801,41 @@ textarea.form-control {
     opacity: 1;
 }
 
-.note-actions button {
-    margin-left: 5px;
+.edit-btn, .delete-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.edit-btn {
+    background-color: #6c757d;
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #5a6268;
+}
+
+.delete-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
+
+.comment-form {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+#note {
+    min-height: 100px;
+    resize: vertical;
 }
