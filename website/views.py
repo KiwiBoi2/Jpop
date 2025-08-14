@@ -22,9 +22,9 @@ def albums():
     return render_template("albums.html", user=current_user)
 
 # artists route
-@views.route("/artists")
-def artists():
-    return render_template("artists.html", user=current_user)
+@views.route("/members")
+def members():
+    return render_template("members.html", user=current_user)
 
 # songs route
 @views.route("/songs")
