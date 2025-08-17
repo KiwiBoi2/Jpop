@@ -38,7 +38,8 @@ def members():
 def songs():
     try:
         # stray kids artist id
-        artist_id = "2dc3f777-81ba-4551-a9cb-95c8a9fc5d36"
+        artist = musicbrainzngs.search_artists(query="Stray Kids")
+        artist_id = artist['artist-list'][0]['id'] if artist['artist-list'] else None
 
         print("Fetching releases from MusicBrainz...")  # debug stuff
         
