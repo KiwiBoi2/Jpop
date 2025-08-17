@@ -3,10 +3,13 @@ from flask_login import login_user, login_required, logout_user, current_user
 from .models import User, Note
 from . import db
 from datetime import datetime
+import musicbrainsngs
 
 # set blueprint
 views = Blueprint("views", __name__)
 
+# setting up musicbrainz for album and artist information
+musicbrainzngs.set_useragent("YourAppName", "0.1", "http://yourapp.com")
 
 # default/home route
 @views.route("/")
