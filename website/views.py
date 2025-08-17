@@ -3,13 +3,17 @@ from flask_login import login_user, login_required, logout_user, current_user
 from .models import User, Note
 from . import db
 from datetime import datetime
-import musicbrainsngs
+import musicbrainzngs
 
 # set blueprint
 views = Blueprint("views", __name__)
 
 # setting up musicbrainz for album and artist information
-musicbrainzngs.set_useragent("YourAppName", "0.1", "http://yourapp.com")
+musicbrainzngs.set_useragent(
+    "StrayKids", 
+    "0.1", 
+    "aaronclh@outlook.com"
+)
 
 # default/home route
 @views.route("/")
@@ -32,7 +36,33 @@ def members():
 # songs route
 @views.route("/songs")
 def songs():
-    return render_template("songs.html", user=current_user)
+    try:
+        # Fetch songs data from MusicBrainz API
+        artist_id = "2dc3f777-81ba-4551-a9cb-95c8a9fc5d36"
+        # Get releases
+        result = musicbrainzngs.browse_releases(
+            artist=artist_id,
+            includes=["recordings","artist-credits"]
+        )
+        releases = result['release-list']
+        
+        songs_data = []
+        for release in releases:
+            if "medium-list" in release:
+                 for medium in release["medium-list"]:
+                     if "track-list" in medium:
+                         for track in medium["track-list"]:
+                             song = {
+                                 "title": track["title"],
+                                 "duration": track["duration"],
+                                 "artist": track["artist-credit"][0]["name"] if track["artist-credit"] else "Unknown"
+                             }
+                             songs_data.append(song)
+
+        return render_template("songs.html", user=current_user, songs=songs_data)
+    except Exception as e:
+        return render_template("songs.html", user=current_user, songs=[], error=str(e))
+
 
 # contact route
 @views.route("/contact", methods=["POST", "GET"])
