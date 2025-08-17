@@ -40,13 +40,14 @@ def songs():
         artist_id = "142b343d-bf5a-428c-a64f-6d1a7566bbe9"
         songs_data = []
         offset = 0
-        limit = 100  # Maximum allowed by MusicBrainz
-        
+        limit = 100
+
         while True:
             print(f"Fetching releases from offset: {offset}")
             result = musicbrainzngs.browse_releases(
                 artist=artist_id,
-                includes=["recordings", "artist-credits", "media"],
+                includes=["recordings", "artist-credits", "media", "release-groups"],
+                release_type=["album", "ep", "single"],
                 limit=limit,
                 offset=offset
             )
@@ -63,14 +64,21 @@ def songs():
                         if "track-list" in medium:
                             for track in medium["track-list"]:
                                 try:
+                                    # Convert milliseconds to minutes:seconds if available
+                                    duration = track.get("length", "N/A")
+                                    if duration != "N/A":
+                                        duration = int(duration)
+                                        minutes = duration // (1000 * 60)
+                                        seconds = (duration % (1000 * 60)) // 1000
+                                        duration = f"{minutes}:{seconds:02d}"
+
                                     song = {
                                         "title": track.get("recording", {}).get("title") or track.get("title", "Unknown Title"),
                                         "album": release.get("title", "Unknown Album"),
                                         "date": release.get("date", "N/A"),
-                                        "duration": track.get("length", "N/A")
+                                        "duration": duration
                                     }
                                     songs_data.append(song)
-                                    print(f"Added song: {song['title']}")
                                 except Exception as track_error:
                                     print(f"Error processing track: {track_error}")
                                     continue
@@ -79,12 +87,12 @@ def songs():
                 break
                 
             offset += limit
-            
+
+        # Sort songs by date (newest first)
+        songs_data.sort(key=lambda x: x["date"] if x["date"] != "N/A" else "0000", reverse=True)
+        
         print(f"Total songs found: {len(songs_data)}")
         
-        if not songs_data:
-            return render_template("songs.html", user=current_user, songs=[], error="No songs found")
-            
         return render_template("songs.html", user=current_user, songs=songs_data)
         
     except Exception as e:
