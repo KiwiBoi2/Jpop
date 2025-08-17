@@ -1,27 +1,75 @@
-{% extends "template.html" %} {% block title %} Signup {% endblock %} 
+{% extends "template.html" %} 
+{% block title %}Sign Up{% endblock %}
+
 {% block content %}
+<section class="section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form method="POST">
+                    <h3 class="text-center mb-4">Sign Up</h3>
+                    
+                    <!-- Email Row -->
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <input 
+                                type="email" 
+                                class="form-control centered-placeholder" 
+                                id="email" 
+                                name="email" 
+                                placeholder="Enter Email"
+                            />
+                        </div>
+                    </div>
 
-<h1>Signup</h1>
+                    <!-- Username Row -->
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <input 
+                                type="text" 
+                                class="form-control centered-placeholder" 
+                                id="username" 
+                                name="username" 
+                                placeholder="Enter Username"
+                            />
+                        </div>
+                    </div>
 
-<form method="POST">Sign Up</h3>
-    <div class="form-group">
-        <label for="email">Email address</label>
-        <input type="text" id="email" name="email" class="form-control" placeholder="Enter Your Email Address"/>
+                    <!-- Password Row -->
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <input 
+                                type="password" 
+                                class="form-control centered-placeholder" 
+                                id="password1" 
+                                name="password1" 
+                                placeholder="Enter Password"
+                            />
+                        </div>
+                    </div>
 
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" class="form-control" placeholder="Enter Your Username"/>
+                    <!-- Confirm Password Row -->
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <input 
+                                type="password" 
+                                class="form-control centered-placeholder" 
+                                id="password2" 
+                                name="password2" 
+                                placeholder="Confirm Password"
+                            />
+                        </div>
+                    </div>
 
-        <label for="password1">Password</label>
-        <input type="password" id="password1" name="password1" class="form-control" placeholder="Enter Your Password"/> 
-
-        <label for="password2">Password</label>
-        <input type="password" id="password2" name="password2" class="form-control" placeholder="Enter Your Password Again"/> 
-
-        <br/>
-        <div align="center">
-            <button class="btn btn-primary" type="submit">Sign Up</button>
+                    <!-- Submit Button Row -->
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-primary">Sign Up</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</form>
-
+</section>
 {% endblock %}

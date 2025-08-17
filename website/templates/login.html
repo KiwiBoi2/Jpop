@@ -1,21 +1,49 @@
-{% extends "template.html" %} {% block title %} Login {% endblock %} 
+{% extends "template.html" %} 
+{% block title %}Login{% endblock %}
+
 {% block content %}
+<section class="section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form method="POST">
+                    <h3 class="text-center mb-4">Login</h3>
+                    
+                    <!-- Email Row -->
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <input 
+                                type="email" 
+                                class="form-control centered-placeholder" 
+                                id="email" 
+                                name="email" 
+                                placeholder="Enter Email"
+                            />
+                        </div>
+                    </div>
 
-<h1>Login</h1>
+                    <!-- Password Row -->
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <input 
+                                type="password" 
+                                class="form-control centered-placeholder" 
+                                id="password" 
+                                name="password" 
+                                placeholder="Enter Password"
+                            />
+                        </div>
+                    </div>
 
-<form method="POST">Login</h3>
-    <div class="form-group">
-        <label for="email">Email address</label>
-        <input type="text" id="email" name="email" class="form-control" placeholder="Enter Your Email Address"/>
-
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" class="form-control" placeholder="Enter Your Password"/> 
-
-        <br/>
-        <div align="center">
-            <button class="btn btn-primary" type="submit">Login</button>
+                    <!-- Submit Button Row -->
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</form>
-
+</section>
 {% endblock %}

@@ -846,3 +846,16 @@ textarea.form-control {
     min-height: 100px;
     resize: vertical;
 }
+
+.centered-placeholder::placeholder {
+    text-align: center;
+}
+
+.centered-placeholder {
+    text-align: center;
+}
+
+.form-control {
+    max-width: 100%;
+    margin: 0 auto;
+}
