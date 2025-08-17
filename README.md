@@ -1,2 +1,2 @@
-# Jpop
-Jpop music archive
+# Stray Kids
+Stray Kids archive
