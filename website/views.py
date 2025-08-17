@@ -11,7 +11,7 @@ views = Blueprint("views", __name__)
 # setting up musicbrainz for album and artist information
 musicbrainzngs.set_useragent(
     "StrayKids", 
-    "0.1", 
+    "1.0", 
     "aaronclh@outlook.com"
 )
 
@@ -37,30 +37,56 @@ def members():
 @views.route("/songs")
 def songs():
     try:
-        # Fetch songs data from MusicBrainz API
+        # stray kids artist id
         artist_id = "2dc3f777-81ba-4551-a9cb-95c8a9fc5d36"
-        # Get releases
+
+        print("Fetching releases from MusicBrainz...")  # debug stuff
+        
+        # get releases and info
         result = musicbrainzngs.browse_releases(
             artist=artist_id,
-            includes=["recordings","artist-credits"]
+            includes=["recordings", "artist-credits", "media"]
         )
+        
+        if 'release-list' not in result:
+            print("No release-list in result:", result)  # Debug print
+            return render_template("songs.html", user=current_user, songs=[], error="No releases found")
+            
         releases = result['release-list']
+        print(f"Found {len(releases)} releases")  # Debug print
         
         songs_data = []
         for release in releases:
+            print(f"\nProcessing release: {release.get('title', 'Unknown')}")  # Debug print
             if "medium-list" in release:
-                 for medium in release["medium-list"]:
-                     if "track-list" in medium:
-                         for track in medium["track-list"]:
-                             song = {
-                                 "title": track["title"],
-                                 "duration": track["duration"],
-                                 "artist": track["artist-credit"][0]["name"] if track["artist-credit"] else "Unknown"
-                             }
-                             songs_data.append(song)
+                for medium in release["medium-list"]:
+                    if "track-list" in medium:
+                        for track in medium["track-list"]:
+                            try:
+                                song = {
+                                    "title": track.get("recording", {}).get("title") or track.get("title", "Unknown Title"),
+                                    "album": release.get("title", "Unknown Album"),
+                                    "date": release.get("date", "N/A"),
+                                    "duration": track.get("length", "N/A")
+                                }
+                                songs_data.append(song)
+                                print(f"Added song: {song}")  # Debug print
+                            except Exception as track_error:
+                                print(f"Error processing track: {track_error}")  # Debug print
+                                continue
 
+        print(f"Total songs processed: {len(songs_data)}")  # Debug print
+        
+        if not songs_data:
+            print("No songs were processed")  # Debug print
+            return render_template("songs.html", user=current_user, songs=[], error="No songs found")
+            
         return render_template("songs.html", user=current_user, songs=songs_data)
+        
     except Exception as e:
+        print(f"Error in songs route: {str(e)}")  # Debug print
+        import traceback
+        print(traceback.format_exc())  # Print full error traceback
         return render_template("songs.html", user=current_user, songs=[], error=str(e))
 
 
