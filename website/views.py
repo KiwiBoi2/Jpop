@@ -3,16 +3,22 @@ from flask_login import login_user, login_required, logout_user, current_user
 from .models import User, Note
 from . import db
 from datetime import datetime
-import musicbrainzngs
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 
 # set blueprint
 views = Blueprint("views", __name__)
 
-# setting up musicbrainz for album and artist information
-musicbrainzngs.set_useragent(
-    "StrayKids", 
-    "1.0", 
-    "aaronclh@outlook.com"
+# setting up Spotify API credentials
+SPOTIFY_CLIENT_ID = "77a4da10d3ad41b9adc3d504c339e0eb"
+SPOTIFY_CLIENT_SECRET = "c493e81ce8744f8b9815e585348c3ce7"
+
+# init spotify client
+spotify = spotipy.Spotify(
+    client_credentials_manager=SpotifyClientCredentials(
+        client_id=SPOTIFY_CLIENT_ID,
+        client_secret=SPOTIFY_CLIENT_SECRET
+    )
 )
 
 # default/home route
@@ -37,69 +43,56 @@ def members():
 @views.route("/songs")
 def songs():
     try:
-        artist_id = "142b343d-bf5a-428c-a64f-6d1a7566bbe9"
+        # stray kids spotify artist id
+        artist_id = "2dIgFjalVxs4ThymZ67YCE"
         songs_data = []
-        offset = 0
-        limit = 100
-
-        while True:
-            print(f"Fetching releases from offset: {offset}")
-            result = musicbrainzngs.browse_releases(
-                artist=artist_id,
-                includes=["recordings", "artist-credits", "media", "release-groups"],
-                release_type=["album", "ep", "single"],
-                limit=limit,
-                offset=offset
-            )
+        
+        # get all albums
+        albums = []
+        album_types = ['album','single','appears_on']
+        
+        for album_type in album_types:
+            results = spotify.artist_albums(artist_id, album_type=album_type)
+            albums.extend(results['items'])
             
-            if 'release-list' not in result or not result['release-list']:
-                break
-                
-            releases = result['release-list']
-            print(f"Found {len(releases)} releases in this batch")
-            
-            for release in releases:
-                if "medium-list" in release:
-                    for medium in release["medium-list"]:
-                        if "track-list" in medium:
-                            for track in medium["track-list"]:
-                                try:
-                                    # Convert milliseconds to minutes:seconds if available
-                                    duration = track.get("length", "N/A")
-                                    if duration != "N/A":
-                                        duration = int(duration)
-                                        minutes = duration // (1000 * 60)
-                                        seconds = (duration % (1000 * 60)) // 1000
-                                        duration = f"{minutes}:{seconds:02d}"
+            while results['next']:
+                results = spotify.next(results)
+                albums.extend(results['items'])
+        
+        print(f"Found {len(albums)} albums for artist {artist_id}")
 
-                                    song = {
-                                        "title": track.get("recording", {}).get("title") or track.get("title", "Unknown Title"),
-                                        "album": release.get("title", "Unknown Album"),
-                                        "date": release.get("date", "N/A"),
-                                        "duration": duration
-                                    }
-                                    songs_data.append(song)
-                                except Exception as track_error:
-                                    print(f"Error processing track: {track_error}")
-                                    continue
+        # get all songs
+        for album in albums:
+            tracks = spotify.album_tracks(album['id'])
             
-            if len(releases) < limit:
-                break
-                
-            offset += limit
-
-        # Sort songs by date (newest first)
-        songs_data.sort(key=lambda x: x["date"] if x["date"] != "N/A" else "0000", reverse=True)
+            for track in tracks['items']:
+                # check main artist
+                if any(artist['id'] == artist_id for artist in track['artists']):
+                    duration_ms = track['duration_ms']
+                    minutes = duration_ms // (1000 * 60)
+                    seconds = (duration_ms % (1000 * 60)) // 1000
+                    
+                    song = {
+                        "title": track['name'],
+                        "album": album['name'],
+                        "date": album['release_date'],
+                        "duration": f"{minutes}:{seconds:02d}",
+                        "preview_url": track['preview_url'],
+                        "spotify_url": track['external_urls']['spotify']
+                    }
+                    songs_data.append(song)
+        
+            # Sort songs by date (newest first)
+        songs_data.sort(key=lambda x: x["date"], reverse=True)
         
         print(f"Total songs found: {len(songs_data)}")
         
-        return render_template("songs.html", user=current_user, songs=songs_data)
-        
+        return render_template("songs.html", user=current_user, songs=songs_data)   
+            
     except Exception as e:
         print(f"Error: {str(e)}")
         return render_template("songs.html", user=current_user, songs=[], error=str(e))
-
-
+        
 # contact route
 @views.route("/contact", methods=["POST", "GET"])
 @login_required

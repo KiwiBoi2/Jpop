@@ -30,7 +30,8 @@
                                     <th>Title</th>
                                     <th>Album</th>
                                     <th>Release Date</th>
-                                    <th>Length</th>
+                                    <th>Duration</th>
+                                    <th>Links</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -40,6 +41,16 @@
                                         <td>{{ song.album }}</td>
                                         <td>{{ song.date }}</td>
                                         <td>{{ song.duration }}</td>
+                                        <td>
+                                            {% if song.preview_url %}
+                                            <a href="{{ song.preview_url }}" target="_blank" class="btn btn-sm btn-primary">
+                                                <i class="fas fa-play"></i> Preview
+                                            </a>
+                                            {% endif %}
+                                            <a href="{{ song.spotify_url }}" target="_blank" class="btn btn-sm btn-success">
+                                                <i class="fab fa-spotify"></i> Spotify
+                                            </a>
+                                        </td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
