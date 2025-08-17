@@ -37,57 +37,58 @@ def members():
 @views.route("/songs")
 def songs():
     try:
-        # stray kids artist id
-        artist = musicbrainzngs.search_artists(query="Stray Kids")
-        artist_id = artist['artist-list'][0]['id'] if artist['artist-list'] else None
-
-        print("Fetching releases from MusicBrainz...")  # debug stuff
-        
-        # get releases and info
-        result = musicbrainzngs.browse_releases(
-            artist=artist_id,
-            includes=["recordings", "artist-credits", "media"]
-        )
-        
-        if 'release-list' not in result:
-            print("No release-list in result:", result)  # Debug print
-            return render_template("songs.html", user=current_user, songs=[], error="No releases found")
-            
-        releases = result['release-list']
-        print(f"Found {len(releases)} releases")  # Debug print
-        
+        artist_id = "142b343d-bf5a-428c-a64f-6d1a7566bbe9"
         songs_data = []
-        for release in releases:
-            print(f"\nProcessing release: {release.get('title', 'Unknown')}")  # Debug print
-            if "medium-list" in release:
-                for medium in release["medium-list"]:
-                    if "track-list" in medium:
-                        for track in medium["track-list"]:
-                            try:
-                                song = {
-                                    "title": track.get("recording", {}).get("title") or track.get("title", "Unknown Title"),
-                                    "album": release.get("title", "Unknown Album"),
-                                    "date": release.get("date", "N/A"),
-                                    "duration": track.get("length", "N/A")
-                                }
-                                songs_data.append(song)
-                                print(f"Added song: {song}")  # Debug print
-                            except Exception as track_error:
-                                print(f"Error processing track: {track_error}")  # Debug print
-                                continue
-
-        print(f"Total songs processed: {len(songs_data)}")  # Debug print
+        offset = 0
+        limit = 100  # Maximum allowed by MusicBrainz
+        
+        while True:
+            print(f"Fetching releases from offset: {offset}")
+            result = musicbrainzngs.browse_releases(
+                artist=artist_id,
+                includes=["recordings", "artist-credits", "media"],
+                limit=limit,
+                offset=offset
+            )
+            
+            if 'release-list' not in result or not result['release-list']:
+                break
+                
+            releases = result['release-list']
+            print(f"Found {len(releases)} releases in this batch")
+            
+            for release in releases:
+                if "medium-list" in release:
+                    for medium in release["medium-list"]:
+                        if "track-list" in medium:
+                            for track in medium["track-list"]:
+                                try:
+                                    song = {
+                                        "title": track.get("recording", {}).get("title") or track.get("title", "Unknown Title"),
+                                        "album": release.get("title", "Unknown Album"),
+                                        "date": release.get("date", "N/A"),
+                                        "duration": track.get("length", "N/A")
+                                    }
+                                    songs_data.append(song)
+                                    print(f"Added song: {song['title']}")
+                                except Exception as track_error:
+                                    print(f"Error processing track: {track_error}")
+                                    continue
+            
+            if len(releases) < limit:
+                break
+                
+            offset += limit
+            
+        print(f"Total songs found: {len(songs_data)}")
         
         if not songs_data:
-            print("No songs were processed")  # Debug print
             return render_template("songs.html", user=current_user, songs=[], error="No songs found")
             
         return render_template("songs.html", user=current_user, songs=songs_data)
         
     except Exception as e:
-        print(f"Error in songs route: {str(e)}")  # Debug print
-        import traceback
-        print(traceback.format_exc())  # Print full error traceback
+        print(f"Error: {str(e)}")
         return render_template("songs.html", user=current_user, songs=[], error=str(e))
 
 
