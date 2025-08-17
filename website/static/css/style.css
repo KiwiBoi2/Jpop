@@ -761,6 +761,14 @@ textarea.form-control {
   color: #c2182c;
 }
 
+.footer h4 {
+  color: #707070;
+}
+
+.footer p {
+  color: #9c9c9c;
+}
+
 /* Styling for note items with hover effects */
 .note-item {
     position: relative;
